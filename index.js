@@ -26,7 +26,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-process.on("SIGINT", exit);
+rl.on("SIGINT", exit);
 
 rl.on("line", (input) => {
   const [command, argFirst, argSecond] = input.split(" ").filter(Boolean);
