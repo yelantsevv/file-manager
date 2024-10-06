@@ -10,8 +10,10 @@ import { ls } from "./files/ls.js";
 import { osFunction } from "./files/os.js";
 import { cat } from "./files/cat.js";
 import { add } from "./files/add.js";
+import { rmFile } from "./files/rm.js";
 
 import url from "url";
+import { hashFile } from "./files/hash.js";
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -31,13 +33,22 @@ rl.on("SIGINT", exit);
 rl.on("line", (input) => {
   const [command, argFirst, argSecond] = input.split(" ").filter(Boolean);
 
-  if (command === ".exit") {
+  if (command === ".exit" || command === "exit") {
     exit();
   } else if (command === "ls") {
     ls();
+  } else if (command === "os") {
+    osFunction(argFirst);
+  } else if (command === "cat") {
+    cat(__currentDir, argFirst);
+  } else if (command === "add") {
+    add(__currentDir, argFirst);
+  } else if (command === "rm") {
+    rmFile(__currentDir, argFirst);
+  } else if (command === "hash") {
+    hashFile(__currentDir, argFirst);
   } else if (command === "up") {
-    const parentDir = path.dirname(__currentDir);
-    __currentDir = parentDir;
+    __currentDir = path.dirname(__currentDir);
     dirname(__currentDir);
   } else if (command === "cd") {
     const nextDir = path.resolve(__currentDir, argFirst);
@@ -46,12 +57,6 @@ rl.on("line", (input) => {
       : console.error("Directory does not exist");
 
     dirname(__currentDir);
-  } else if (command === "os") {
-    osFunction(argFirst);
-  } else if (command === "cat") {
-    cat(__currentDir, argFirst);
-  } else if (command === "add") {
-    add(__currentDir, argFirst);
   } else {
     console.error(`Invalid input`);
   }
