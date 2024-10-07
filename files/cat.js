@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
+import { __currentDir } from "../index.js";
 
-function cat(__currentDir, path_to_file) {
+function cat(path_to_file) {
   const filePath = path.join(__currentDir, `${path_to_file}`);
 
   const readableStream = fs.createReadStream(filePath, { encoding: "utf8" });

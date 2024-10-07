@@ -1,10 +1,11 @@
 import fs from "fs";
 import path from "path";
+import { __currentDir } from "../index.js";
 
 let folders = [];
 let files = [];
 
-const dirname = (__currentDir) => {
+function ridFoldersAndFiles() {
   folders = [];
   files = [];
   const items = fs.readdirSync(__currentDir);
@@ -17,7 +18,9 @@ const dirname = (__currentDir) => {
       files.push(item);
     }
   });
-
+}
+const dirname = () => {
+  ridFoldersAndFiles();
   console.log(`You are currently in ${__currentDir}`);
 };
-export { dirname, folders, files };
+export { dirname, ridFoldersAndFiles, folders, files };

@@ -11,9 +11,11 @@ import { osFunction } from "./files/os.js";
 import { cat } from "./files/cat.js";
 import { add } from "./files/add.js";
 import { rmFile } from "./files/rm.js";
+import { hashFile } from "./files/hash.js";
+import { compress } from "./files/compress.js";
+import { decompress } from "./files/decompress.js";
 
 import url from "url";
-import { hashFile } from "./files/hash.js";
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -21,7 +23,7 @@ const homeDir = os.homedir();
 let __currentDir = __dirname || homeDir;
 
 start();
-dirname(__currentDir);
+dirname();
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -40,24 +42,30 @@ rl.on("line", (input) => {
   } else if (command === "os") {
     osFunction(argFirst);
   } else if (command === "cat") {
-    cat(__currentDir, argFirst);
+    cat(argFirst);
   } else if (command === "add") {
-    add(__currentDir, argFirst);
+    add(argFirst);
   } else if (command === "rm") {
-    rmFile(__currentDir, argFirst);
+    rmFile(argFirst);
   } else if (command === "hash") {
-    hashFile(__currentDir, argFirst);
+    hashFile(argFirst);
+  } else if (command === "compress") {
+    compress(argFirst, argSecond);
+  } else if (command === "decompress") {
+    decompress(argFirst, argSecond);
   } else if (command === "up") {
     __currentDir = path.dirname(__currentDir);
-    dirname(__currentDir);
+    dirname();
   } else if (command === "cd") {
     const nextDir = path.resolve(__currentDir, argFirst);
     fs.existsSync(nextDir)
       ? (__currentDir = nextDir)
       : console.error("Directory does not exist");
 
-    dirname(__currentDir);
+    dirname();
   } else {
     console.error(`Invalid input`);
   }
 });
+
+export { rl, __currentDir };

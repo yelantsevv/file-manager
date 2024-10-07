@@ -14,11 +14,17 @@ npm run start -- --username=your_username
 .exit
 ```
 
+or
+
+```bash
+exit
+```
+
 List of operations and their syntax:
 
 - Navigation & working directory (nwd)
 
-  - Go upper from current directory (when you are in the root folder this operation shouldn't change working directory)
+  - Go upper from current directory
 
   ```bash
   up
@@ -36,7 +42,7 @@ List of operations and their syntax:
   ls
   ```
 
-  - Read file and print it's content in console (should be done using Readable stream):
+  - Read file and print it's content in console
 
   ```bash
   cat path_to_file
