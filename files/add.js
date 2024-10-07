@@ -1,17 +1,15 @@
-import { existsSync, writeFileSync } from "fs";
+import fs from "fs";
 import path from "path";
-import { ridFoldersAndFiles } from "../files/dirname.js";
 import { __currentDir } from "../index.js";
 
 function add(argFirst) {
   const filePath = path.join(__currentDir, argFirst);
 
   try {
-    if (existsSync(filePath)) {
-      throw new Error("file already exists");
+    if (fs.existsSync(filePath)) {
+      throw new Error(`file ${argFirst} already exists`);
     }
-    writeFileSync(filePath, "");
-    ridFoldersAndFiles();
+    fs.writeFileSync(filePath, "");
   } catch (error) {
     console.error(error.message);
   }

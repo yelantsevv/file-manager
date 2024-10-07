@@ -10,17 +10,14 @@ import { ls } from "./files/ls.js";
 import { osFunction } from "./files/os.js";
 import { cat } from "./files/cat.js";
 import { add } from "./files/add.js";
-import { rmFile } from "./files/rm.js";
+import { removeFile } from "./files/rm.js";
 import { hashFile } from "./files/hash.js";
 import { compress } from "./files/compress.js";
 import { decompress } from "./files/decompress.js";
+import { reNameFile } from "./files/rn.js";
+import { copyFileToDir } from "./files/cp.js";
 
-import url from "url";
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const homeDir = os.homedir();
-let __currentDir = __dirname || homeDir;
+let __currentDir = os.homedir();
 
 start();
 dirname();
@@ -45,8 +42,15 @@ rl.on("line", (input) => {
     cat(argFirst);
   } else if (command === "add") {
     add(argFirst);
+  } else if (command === "rn") {
+    reNameFile(argFirst, argSecond);
+  } else if (command === "cp") {
+    copyFileToDir(argFirst, argSecond);
+  } else if (command === "mv") {
+    copyFileToDir(argFirst, argSecond);
+    removeFile(argFirst);
   } else if (command === "rm") {
-    rmFile(argFirst);
+    removeFile(argFirst);
   } else if (command === "hash") {
     hashFile(argFirst);
   } else if (command === "compress") {
@@ -55,17 +59,15 @@ rl.on("line", (input) => {
     decompress(argFirst, argSecond);
   } else if (command === "up") {
     __currentDir = path.dirname(__currentDir);
-    dirname();
   } else if (command === "cd") {
     const nextDir = path.resolve(__currentDir, argFirst);
     fs.existsSync(nextDir)
       ? (__currentDir = nextDir)
-      : console.error("Directory does not exist");
-
-    dirname();
+      : console.error(`Directory ${argFirst} does not exist`);
   } else {
     console.error(`Invalid input`);
   }
+  dirname();
 });
 
 export { rl, __currentDir };

@@ -7,6 +7,10 @@
 ```bash
 npm run start -- --username=your_username
 ```
+or
+```bash
+node index.js -- --username=your_username
+```
 
 - exit
 

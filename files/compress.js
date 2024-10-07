@@ -4,7 +4,7 @@ import zlib from "zlib";
 import path from "path";
 import { __currentDir } from "../index.js";
 
-const compress = async (argFirst, argSecond) => {
+async function compress(argFirst, argSecond) {
   const fileToCompress = path.join(__currentDir, argFirst);
   const archive = path.join(__currentDir, argSecond);
 
@@ -13,6 +13,6 @@ const compress = async (argFirst, argSecond) => {
     zlib.createBrotliCompress(),
     fs.createWriteStream(archive)
   );
-};
+}
 
 export { compress };

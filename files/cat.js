@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { __currentDir } from "../index.js";
+import { dirname } from "./dirname.js";
 
 function cat(path_to_file) {
   const filePath = path.join(__currentDir, `${path_to_file}`);
@@ -11,12 +12,11 @@ function cat(path_to_file) {
     console.log(chunk);
   });
 
-  readableStream.on("end", () => {
-    console.log("File reading completed.");
-  });
+  readableStream.on("end", dirname);
 
-  readableStream.on("error", (err) => {
-    console.error("Error reading file:", err.message);
+  readableStream.on("error", () => {
+    console.error(`Error reading file: ${path_to_file}`);
+    dirname();
   });
 }
 export { cat };

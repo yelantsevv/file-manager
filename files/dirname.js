@@ -19,8 +19,8 @@ function ridFoldersAndFiles() {
     }
   });
 }
-const dirname = () => {
+function dirname() {
   ridFoldersAndFiles();
-  console.log(`You are currently in ${__currentDir}`);
-};
-export { dirname, ridFoldersAndFiles, folders, files };
+  console.log("\x1b[36m%s\x1b[0m", `You are currently in ${__currentDir}`);
+}
+export { dirname, folders, files };
