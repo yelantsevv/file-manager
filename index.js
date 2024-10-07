@@ -17,7 +17,11 @@ import { decompress } from "./files/decompress.js";
 import { reNameFile } from "./files/rn.js";
 import { copyFileToDir } from "./files/cp.js";
 
-let __currentDir = os.homedir();
+import url from "url";
+let __dirname = null;
+__dirname = path.dirname(url.fileURLToPath(import.meta.url));
+
+let __currentDir = __dirname || os.homedir();
 
 start();
 dirname();
@@ -47,8 +51,7 @@ rl.on("line", (input) => {
   } else if (command === "cp") {
     copyFileToDir(argFirst, argSecond);
   } else if (command === "mv") {
-    copyFileToDir(argFirst, argSecond);
-    removeFile(argFirst);
+    copyFileToDir(argFirst, argSecond, true);
   } else if (command === "rm") {
     removeFile(argFirst);
   } else if (command === "hash") {

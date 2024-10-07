@@ -3,7 +3,7 @@ import fs from "fs";
 import { promises } from "stream";
 import { __currentDir } from "../index.js";
 
-async function copyFileToDir(argFirst, argSecond) {
+async function copyFileToDir(argFirst, argSecond, isMove = false) {
   const source = path.join(__currentDir, argFirst);
   const destinationDir = path.join(__currentDir, argSecond);
   const destinationFilePath = path.join(__currentDir, argSecond, argFirst);
@@ -24,6 +24,10 @@ async function copyFileToDir(argFirst, argSecond) {
     const writeStream = fs.createWriteStream(destinationFilePath);
 
     await promises.pipeline(readStream, writeStream);
+
+    if (isMove) {
+      fs.rmSync(source);
+    }
   } catch (error) {
     console.error(error.message);
   }
