@@ -1,4 +1,5 @@
 import { folders, files } from "./dirname.js";
+import { map, sort } from "./helpers.js";
 
 const ls = () => {
   let folder = map(sort(folders), "Folder");
@@ -6,13 +7,5 @@ const ls = () => {
 
   console.table([...folder, ...file]);
 };
-
-function sort(args) {
-  return args.sort((a, b) => a.localeCompare(b));
-}
-
-function map(args, type) {
-  return args.map((a) => ({ Name: a, Type: type }));
-}
 
 export { ls };

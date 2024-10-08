@@ -14,7 +14,7 @@ export function osFunction(arg) {
   } else if (arg === "--architecture") {
     rez = os.arch();
   } else {
-    console.error("Invalid input");
+    throw new Error("Invalid input");
   }
 
   console.log(rez);

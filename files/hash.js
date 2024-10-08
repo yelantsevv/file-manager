@@ -1,12 +1,13 @@
 import fs from "fs";
-import path from "path";
 import { createHash } from "crypto";
-import { __currentDir } from "../index.js";
+import { pathFull } from "./helpers.js";
 
-function hashFile(argFirst) {
-  const filePath = path.join(__currentDir, argFirst);
+async function hashFile(argFirst) {
+  if (!argFirst) {
+    throw new Error("Please provide file name");
+  }
   const hash = createHash("sha256");
-  const stream = fs.createReadStream(filePath);
+  const stream = fs.createReadStream(pathFull(argFirst));
 
   stream.on("data", (data) => {
     hash.update(data);
@@ -14,6 +15,7 @@ function hashFile(argFirst) {
 
   stream.on("end", () => {
     console.log(hash.digest("hex"));
+    stream.close(1);
   });
 
   stream.on("error", (err) => {

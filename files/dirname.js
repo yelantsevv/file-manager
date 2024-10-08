@@ -1,17 +1,16 @@
-import fs from "fs";
-import path from "path";
+import { promises } from "fs";
+import { pathFull } from "./helpers.js";
 import { __currentDir } from "../index.js";
 
 let folders = [];
 let files = [];
 
-function ridFoldersAndFiles() {
+async function ridFoldersAndFiles() {
   folders = [];
   files = [];
-  const items = fs.readdirSync(__currentDir);
-  items.forEach((item) => {
-    const itemPath = path.join(__currentDir, item);
-    const stat = fs.lstatSync(itemPath);
+  const items = await promises.readdir(__currentDir);
+  items.forEach(async (item) => {
+    const stat = await promises.lstat(pathFull(item));
     if (stat.isDirectory()) {
       folders.push(item);
     } else if (stat.isFile()) {
@@ -21,6 +20,6 @@ function ridFoldersAndFiles() {
 }
 function dirname() {
   ridFoldersAndFiles();
-  console.log("\x1b[36m%s\x1b[0m", `You are currently in ${__currentDir}`);
+  return `You are currently in ${__currentDir}`;
 }
 export { dirname, folders, files };

@@ -2,34 +2,35 @@ import path from "path";
 import fs from "fs";
 import { promises } from "stream";
 import { __currentDir } from "../index.js";
+import { isExists, isExistsFolder } from "./helpers.js";
 
 async function copyFileToDir(argFirst, argSecond, isMove = false) {
+  if (!argFirst || !argSecond) {
+    throw new Error("Please provide both arguments");
+  }
   const source = path.join(__currentDir, argFirst);
   const destinationDir = path.join(__currentDir, argSecond);
   const destinationFilePath = path.join(__currentDir, argSecond, argFirst);
-  try {
-    if (!fs.existsSync(source)) {
-      throw new Error(`file ${argFirst} does not exist`);
-    }
 
-    if (!fs.existsSync(destinationDir)) {
-      throw new Error(`directory ${argSecond} does not exist`);
-    }
+  if (!(await isExists(source))) {
+    throw new Error(`file ${argFirst} does not exist`);
+  }
 
-    if (fs.existsSync(destinationFilePath)) {
-      throw new Error(`file ${argFirst} already exists in ${argSecond}`);
-    }
+  if (!(await isExistsFolder(destinationDir))) {
+    throw new Error(`directory ${argSecond} does not exist`);
+  }
 
-    const readStream = fs.createReadStream(source);
-    const writeStream = fs.createWriteStream(destinationFilePath);
+  if (await isExists(destinationFilePath)) {
+    throw new Error(`file ${argFirst} already exists in ${argSecond}`);
+  }
 
-    await promises.pipeline(readStream, writeStream);
+  const readStream = fs.createReadStream(source);
+  const writeStream = fs.createWriteStream(destinationFilePath);
 
-    if (isMove) {
-      fs.rmSync(source);
-    }
-  } catch (error) {
-    console.error(error.message);
+  await promises.pipeline(readStream, writeStream);
+
+  if (isMove) {
+    fs.promises.rm(source);
   }
 }
 

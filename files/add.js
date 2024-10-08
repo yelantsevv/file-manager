@@ -1,17 +1,13 @@
-import fs from "fs";
-import path from "path";
-import { __currentDir } from "../index.js";
+import { promises } from "fs";
+import { isExists, pathFull } from "./helpers.js";
 
-function add(argFirst) {
-  const filePath = path.join(__currentDir, argFirst);
-
-  try {
-    if (fs.existsSync(filePath)) {
-      throw new Error(`file ${argFirst} already exists`);
-    }
-    fs.writeFileSync(filePath, "");
-  } catch (error) {
-    console.error(error.message);
+async function add(argFirst) {
+  if (!argFirst) {
+    throw new Error("Please provide file name");
   }
+  if (await isExists(pathFull(argFirst))) {
+    throw new Error(`file ${argFirst} already exists`);
+  }
+  await promises.writeFile(pathFull(argFirst), "");
 }
 export { add };

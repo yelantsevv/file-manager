@@ -1,17 +1,17 @@
 import { promises } from "stream";
 import fs from "fs";
 import zlib from "zlib";
-import path from "path";
-import { __currentDir } from "../index.js";
+import { pathFull } from "./helpers.js";
 
 async function compress(argFirst, argSecond) {
-  const fileToCompress = path.join(__currentDir, argFirst);
-  const archive = path.join(__currentDir, argSecond);
+  if (!argFirst || !argSecond) {
+    throw new Error("Please provide both arguments");
+  }
 
   await promises.pipeline(
-    fs.createReadStream(fileToCompress),
+    fs.createReadStream(pathFull(argFirst)),
     zlib.createBrotliCompress(),
-    fs.createWriteStream(archive)
+    fs.createWriteStream(argFirst(argSecond))
   );
 }
 

@@ -1,18 +1,18 @@
 import { promises } from "stream";
 import fs from "fs";
 import zlib from "zlib";
-import path from "path";
-import { __currentDir } from "../index.js";
+import { pathFull } from "./helpers.js";
 
- async function decompress (argFirst, argSecond) {
-  const archive = path.join(__currentDir, argFirst);
-  const fileToDecompress = path.join(__currentDir, argSecond);
+async function decompress(argFirst, argSecond) {
+  if (!argFirst || !argSecond) {
+    throw new Error("Please provide both arguments");
+  }
 
   await promises.pipeline(
-    fs.createReadStream(archive),
+    fs.createReadStream(pathFull(argFirst)),
     zlib.createBrotliDecompress(),
-    fs.createWriteStream(fileToDecompress)
+    fs.createWriteStream(pathFull(argSecond))
   );
-};
+}
 
 export { decompress };

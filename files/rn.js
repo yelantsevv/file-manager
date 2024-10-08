@@ -1,20 +1,15 @@
-import fs from "fs";
-import path from "path";
-import { __currentDir } from "../index.js";
+import { promises } from "fs";
+import { isExists, pathFull } from "./helpers.js";
 
-function reNameFile(argFirst, argSecond) {
-  const filePath = path.join(__currentDir, argFirst);
-  const filePathNew = path.join(__currentDir, argSecond);
-  try {
-    if (!fs.existsSync(filePath)) {
-      throw new Error(`file ${argFirst} does not exist`);
-    }
-    if (fs.existsSync(filePathNew)) {
-      throw new Error(`file ${argSecond} already exists`);
-    }
-    fs.renameSync(filePath, filePathNew);
-  } catch (error) {
-    console.error(error.message);
+async function reNameFile(argFirst = "", argSecond = "") {
+  const filePath = pathFull(argFirst);
+  const filePathNew = pathFull(argSecond);
+  if (!(await isExists(filePath))) {
+    throw new Error(`file ${argFirst} does not exist`);
   }
+  if (await isExists(filePathNew)) {
+    throw new Error(`file ${argSecond} already exists`);
+  }
+  promises.rename(filePath, filePathNew);
 }
 export { reNameFile };

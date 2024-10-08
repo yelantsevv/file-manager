@@ -1,16 +1,12 @@
-import fs from "fs";
-import path from "path";
-import { __currentDir } from "../index.js";
+import { promises } from "fs";
+import { isExists, pathFull } from "./helpers.js";
 
-function removeFile(argFirst) {
-  const filePath = path.join(__currentDir, argFirst);
-  try {
-    if (!fs.existsSync(filePath)) {
-      throw new Error(`file ${argFirst} does not exist`);
-    }
-    fs.rmSync(filePath);
-  } catch (error) {
-    console.error(error.message);
+async function removeFile(argFirst = "") {
+  const filePath = pathFull(argFirst);
+  if (!(await isExists(filePath))) {
+    throw new Error(`file ${argFirst} does not exist`);
   }
+
+  await promises.rm(filePath);
 }
 export { removeFile };
