@@ -19,7 +19,7 @@ import { isExistsFolder } from "./files/helpers.js";
 
 import url from "url";
 let __dirname = null;
-__dirname = path.dirname(url.fileURLToPath(import.meta.url));
+// __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 let __currentDir = __dirname || os.homedir();
 
